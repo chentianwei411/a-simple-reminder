@@ -25,28 +25,28 @@ document.addEventListener('turbolinks:load', () => {
       },
       // 不理解template
       template: "<App v-bind:original_lists='lists' />",
-      components: {App, draggable}
+      components: {App}
     })
   }
 
-  var main = document.getElementById("main")
-  if ( main != undefined) {
-    var vm = new Vue({
-      el: main,
-      data: {
-        list: [
-          {name: 'John'}, {name: "123"}, {name: "world!!!"}
-        ]
-      },
-      methods: {
-        add: function() {
-          this.list.push({name: "hahhas"})
-        },
-        replace: function() {
-          this.list= [{}]
-        }
-      },
-      components: { draggable }
-    })
-  }
+  // var main = document.getElementById("main")
+  // if ( main != undefined) {
+  //   var vm = new Vue({
+  //     el: main,
+  //     data: {
+  //       list: [
+  //         {name: 'John'}, {name: "123"}, {name: "world!!!"}
+  //       ]
+  //     },
+  //     methods: {
+  //       add: function() {
+  //         this.list.push({name: "hahhas"})
+  //       },
+  //       replace: function() {
+  //         this.list= [{}]
+  //       }
+  //     },
+  //     components: { draggable }
+  //   })
+  // }
 })

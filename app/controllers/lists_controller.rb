@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-  before_action :set_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_list, only: [:show, :edit, :update, :destroy, :move]
 
   # GET /lists
   # GET /lists.json
@@ -59,6 +59,14 @@ class ListsController < ApplicationController
       format.html { redirect_to lists_url, notice: 'List was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def move
+    @list = List.find(params[:id])
+    # acts_as_list中的方法: 改变Positon,并Reorder it.
+    # gem 自动交互2者的position。只需要改被拖动的即可。
+    @list.insert_at(list_params[:position].to_i)
+    render :index
   end
 
   private
