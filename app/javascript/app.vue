@@ -1,29 +1,20 @@
 <template>
-  <draggable v-model='lists' :options="{group: 'lists'}" class='row dragArea' @end='listMoved'>
-      <div v-for='(list, index) in lists' class="col-3">
+  <draggable v-model='lists' :options="{group: 'lists'}" class='board' @end='listMoved'>
+      <div v-for='(list, index) in lists' class="list">
         <h6 >{{ list.name }}</h6>
-        <hr>
-        <div class='card'>
-          <draggable v-model='list.cards' :options="{group: 'cards'}" class="draggArea" @change="cardMoved">
-            <div v-for="(card, index) in list.cards" class='card-body mb-3'>
-              {{card.name}}.
-            </div>
-          </draggable>
-          <div class="card-footer">
-            <div class="input-group input-group-sm">
-              <input type="text" class="form-control" @input="messages[list.id] = $event.target.value" v-bind:value='messages[list.id]'>
-              <div class="input-group-append">
-                <span  @click="submitMessages(list.id)" class="input-group-text">add</span>
-              </div>
-            </div>
+
+        <draggable v-model='list.cards' :options="{group: 'cards'}" class="list-card" @change="cardMoved">
+          <div v-for="(card, index) in list.cards" class='card card-body mb-2'>
+            <span>{{card.name}}</span>
           </div>
-        </div>
+        </draggable>
+        <input type="text" class="form-control mb-1" v-model='messages[list.id]'>
+        <button  @click="submitMessages(list.id)" class="btn btn-secondary btn-sm">add card</button>
       </div>
   </draggable>
 </template>
 
 <script>
-// import是否可以加在外面？？？
 import draggable from 'vuedraggable'
 
 export default {
@@ -33,7 +24,9 @@ export default {
 
   data: function() {
     return {
-      messages:{},
+      // messages必须是一个对象，而不能是String。
+      // 因为有多个输入框，它们的value必须各自绑定各自的。
+      messages: {},
       lists: this.original_lists,
     }
   },
@@ -83,6 +76,10 @@ export default {
     },
 
     submitMessages: function(list_id) {
+      if (this.messages[list_id] == undefined) {
+        return
+      }
+
       var data = new FormData()
       // card记录有list_id和name，2个字段属性。
       data.append("card[list_id]", list_id)
@@ -97,8 +94,12 @@ export default {
         data: data,
         dataType: 'json',
         success: (data) => {
+          console.log(list_id)
           // 每个list进行函数测试，找到符合测试条件的list,返回它的id号。
-          const index = this.lists.findIndex((item) => { item.id == list_id })
+          const index = this.lists.findIndex((list) => {
+            return list.id == list_id
+          })
+          console.log(index)
           this.lists[index].cards.push(data)
           this.messages[list_id] = undefined
         }
@@ -109,17 +110,28 @@ export default {
 </script>
 
 <style scoped>
-h6 {
-  text-align: center;
+
+.board {
+  white-space: nowrap;
+  overflow-x: auto;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
 }
 
-
-p {
-  font-size: 4em;
-  text-align: center;
+.list {
+  background-color: #dfe3e6;
+  border-radius: 3px;
+  display:inline-block;
+  vertical-align: top;
+  width: 270px;
+  padding: 10px;
+  margin-right: 10px;
 }
 
-.dragArea {
-  min-height: 20px;
+.list-card {
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  min-height: 10px;
 }
 </style>
