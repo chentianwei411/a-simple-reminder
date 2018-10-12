@@ -1,6 +1,14 @@
 <template>
   <draggable v-model='lists' :options="{group: 'lists'}" class='board' @end='listMoved'>
     <list v-for="(list, index) in lists" v-bind:list='list'></list>
+
+    <a v-if="!editable" @click="inputMessage">add a list</a>
+    <div v-if="editable" class="list">
+      <label>Please enter your list:</label>
+      <input type="text" class="form-control mb-1" v-model='message' ref='inputlist'>
+      <button @click="submitMessage" class="btn btn-secondary btn-sm">add list</button>
+      <a @click="editable = false">cancel</a>
+    </div>
   </draggable>
 </template>
 
@@ -19,10 +27,40 @@ export default {
       // 因为有多个输入框，它们的value必须各自绑定各自的。
       // messages: {}, 移动到子组件list.vue中去了，并改变了type,为string.
       lists: this.original_lists,
+      editable: false,
+      message: undefined
     }
   },
 
   methods: {
+    inputMessage: function() {
+      this.editable = true
+      this.$nextTick(function(){
+        this.$refs.inputlist.focus()
+      })
+    },
+    submitMessage: function() {
+      if (this.message == undefined ) {
+        return
+      }
+
+      var data = new FormData()
+      data.append("list[name]", this.message)
+
+      Rails.ajax({
+        url: '/lists',
+        type: "POST",
+        data: data,
+        dataType: 'json',
+        success: (data) => {
+          window.store.lists.push(data)
+          this.message = ''
+          this.editable = false
+        }
+
+      })
+    },
+
     listMoved: function(event) {
       console.log(event)
       // 改变位置发生改变的list的position属性。
@@ -107,6 +145,15 @@ export default {
   overflow-x: auto;
   margin-bottom: 8px;
   padding-bottom: 8px;
+}
+.list {
+  background-color: #dfe3e6;
+  border-radius: 3px;
+  display:inline-block;
+  vertical-align: top;
+  width: 270px;
+  padding: 10px;
+  margin-right: 10px;
 }
 
 </style>

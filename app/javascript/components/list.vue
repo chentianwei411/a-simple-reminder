@@ -97,15 +97,6 @@
 </script>
 
 <style scoped>
-.list {
-  background-color: #dfe3e6;
-  border-radius: 3px;
-  display:inline-block;
-  vertical-align: top;
-  width: 270px;
-  padding: 10px;
-  margin-right: 10px;
-}
 /* CSS#list-card  内部需要添加min-height,这是draggable插件的一个bug的处理方法。 */
 .list-card {
   overflow: hidden;
