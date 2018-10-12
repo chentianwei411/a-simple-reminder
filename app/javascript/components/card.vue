@@ -1,0 +1,87 @@
+<template>
+  <div>
+    <div v-on:click='editing = true' class="card card-body mb-3">
+      {{ card.name }}
+    </div>
+    <!-- 通过editing，来决定是否加载这个div，连带2个类， -->
+    <div v-if='editing' class="modal-backdrop show"></div>
+
+    <div v-if='editing' @click='closeModal' class="modal show" style="display: block">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">{{ card.name }}</h4>
+          </div>
+
+          <div class="modal-body">
+            <input v-bind:value='name' @input="name = $event.target.value" class="form-control"></input>
+          </div>
+
+          <div class="modal-footer">
+            <button @click="save" type="button" class="btn btn-primary">Save changes</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: ["card", "list"],
+    data: function() {
+      return {
+        editing: false,
+        name: this.card.name,
+      }
+    },
+
+    methods: {
+      // classList 属性， 得到元素的类的列表，一个对象DOMTokenList(2)
+      closeModal: function(event) {
+        if (event.target.classList.contains("modal")) {
+          this.editing = false
+        }
+      },
+
+      save: function() {
+        var data = new FormData
+        data.append("card[name]", this.name)
+        const list_id = this.list.id
+        const card_id = this.card.id
+        console.log(this);
+        Rails.ajax({
+          url:`/cards/${card_id}`,
+          type: "PATCH",
+          data: data,
+          dataType: 'json',
+          success: function(data) {
+            // console.log(this); 这里的this指当前函数本身，不是父作用域，this代表本身。
+            // 要使用父作用域this，需要使用fat arrow函数。
+            const list_index = window.store.lists.findIndex((item) => {
+              return item.id === list_id
+            })
+            const cardIndex = window.store.lists[list_index].cards.findIndex((item) => {
+              return item.id === card_id
+            })
+            window.store.lists[list_index].cards.splice(cardIndex, 1, data)
+          }
+        })
+        this.editing = false
+      },
+    }
+  }
+</script>
+
+<!--
+show 是否显示modal
+fade 添加一个过度，从上到下出现窗口。
+modal-backdrop provide a click area for dismissing shown modals when clicking outside the modal.
+modal-lg 弹出窗口大小
+ -->
+
+<style scoped>
+
+</style>

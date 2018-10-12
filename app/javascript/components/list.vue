@@ -3,10 +3,9 @@
     <h6 >{{ list.name }}</h6>
 
     <draggable v-model='list.cards' :options="{group: 'cards'}" class="list-card" @change="cardMoved">
-      <div v-for="(card, index) in list.cards" class='card card-body mb-2'>
-        <span>{{card.name}}</span>
-      </div>
+      <card v-for="card in list.cards" v-bind:card='card' v-bind:list="list"></card>
     </draggable>
+
     <a v-if="!editable" @click="inputMessage">add a card</a>
     <div v-if="editable">
       <input type="text" class="form-control mb-1" v-model='message' ref='input'>
@@ -18,9 +17,10 @@
 
 <script>
   import draggable from "vuedraggable"
+  import card from 'components/card'
 
   export default {
-    components: { draggable },
+    components: { draggable, card },
     props: ['list'],
     data: function() {
       return {
@@ -110,7 +110,6 @@
 .list-card {
   overflow: hidden;
   position: relative;
-  z-index: 10;
   min-height: 10px;
 }
 </style>
