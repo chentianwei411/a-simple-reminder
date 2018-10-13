@@ -6,7 +6,7 @@
     <div v-if="editable" class="list">
       <label>Please enter your list:</label>
       <input type="text" class="form-control mb-1" v-model='message' ref='inputlist'>
-      <button @click="submitMessage" class="btn btn-secondary btn-sm">add list</button>
+      <button @click="createList" class="btn btn-secondary btn-sm">add list</button>
       <a @click="editable = false">cancel</a>
     </div>
   </draggable>
@@ -19,16 +19,22 @@ import list from 'components/list'
 export default {
   components: { draggable, list},
 
-  props: ["original_lists",],
+  // props: ["original_lists",], //改用vuex
 
   data: function() {
     return {
       // messages必须是一个对象，而不能是String。
       // 因为有多个输入框，它们的value必须各自绑定各自的。
       // messages: {}, 移动到子组件list.vue中去了，并改变了type,为string.
-      lists: this.original_lists,
+      // lists: this.original_lists, //改用vuex
       editable: false,
       message: undefined
+    }
+  },
+
+  computed: {
+    lists() {
+      return this.$store.state.lists;
     }
   },
 
@@ -39,7 +45,7 @@ export default {
         this.$refs.inputlist.focus()
       })
     },
-    submitMessage: function() {
+    createList: function() {
       if (this.message == undefined ) {
         return
       }
@@ -53,7 +59,9 @@ export default {
         data: data,
         dataType: 'json',
         success: (data) => {
-          window.store.lists.push(data)
+          // 改用vuex,所有lists的变化统一放到Vuex.Store实例中。
+          this.$store.commit('addList', data)
+          // window.store.lists.push(data)
           this.message = ''
           this.editable = false
         }

@@ -49,24 +49,26 @@
       save: function() {
         var data = new FormData
         data.append("card[name]", this.name)
-        const list_id = this.list.id
+        // const list_id = this.list.id
         const card_id = this.card.id
-        console.log(this);
+
         Rails.ajax({
           url:`/cards/${card_id}`,
           type: "PATCH",
           data: data,
           dataType: 'json',
-          success: function(data) {
+          success: data => {
             // console.log(this); 这里的this指当前函数本身，不是父作用域，this代表本身。
             // 要使用父作用域this，需要使用fat arrow函数。
-            const list_index = window.store.lists.findIndex((item) => {
-              return item.id === list_id
-            })
-            const cardIndex = window.store.lists[list_index].cards.findIndex((item) => {
-              return item.id === card_id
-            })
-            window.store.lists[list_index].cards.splice(cardIndex, 1, data)
+            // const list_index = window.store.lists.findIndex((item) => {
+            //   return item.id === list_id
+            // })
+            // const cardIndex = window.store.lists[list_index].cards.findIndex((item) => {
+            //   return item.id === card_id
+            // })
+            // window.store.lists[list_index].cards.splice(cardIndex, 1, data)
+
+            this.$store.commit('editCard', data)
           }
         })
         this.editing = false

@@ -9,7 +9,7 @@
     <a v-if="!editable" @click="inputMessage">add a card</a>
     <div v-if="editable">
       <input type="text" class="form-control mb-1" v-model='message' ref='input'>
-      <button @click="submitMessage" class="btn btn-secondary btn-sm">add card</button>
+      <button @click="createCard" class="btn btn-secondary btn-sm">add card</button>
       <a @click="editable = false">cancel</a>
     </div>
   </div>
@@ -61,7 +61,7 @@
         })
       },
 
-      submitMessage: function() {
+      createCard: function() {
         if (this.message == undefined) {
           return
         }
@@ -81,12 +81,14 @@
           dataType: 'json',
           success: (data) => {
             // 每个list进行函数测试，找到符合测试条件的list,返回它的id号。
-
             // 这里从window对象中的全局变量store中找对应list的index。
-            const index = window.store.lists.findIndex((item) => {
-              return item.id == this.list.id
-            })
-            window.store.lists[index].cards.push(data)
+            // const index = window.store.state.lists.findIndex((item) => {
+            //   return item.id == this.list.id
+            // })
+            // window.store.lists[index].cards.push(data)
+
+            // 使用Vuex.Store实例，对state.lists进行状态的管理
+            this.$store.commit('addCard', data)
             this.message = ""
           }
         })

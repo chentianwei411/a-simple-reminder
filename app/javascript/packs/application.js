@@ -1,19 +1,51 @@
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import App from '../app.vue'
+import Vuex from 'vuex'
 
+Vue.use(Vuex)
 Vue.use(TurbolinksAdapter)
+
+
 // 增加一个全局变量
-window.store = {}
+window.store = new Vuex.Store({
+  state: {
+    lists: []
+  },
+
+  mutations: {
+    addList(state, data) {
+      state.lists.push(data)
+    },
+    addCard(state, data) {
+      const index = state.lists.findIndex((item) => {
+        return item.id == data.list.id
+      })
+      state.lists[index].cards.push(data)
+    },
+    editCard(state, data) {
+      const list_index = state.lists.findIndex((item) => {
+        return item.id === data.list.id
+      });
+      const cardIndex = state.lists[list_index].cards.findIndex((item) => {
+        return item.id === data.id
+      });
+      state.lists[list_index].cards.splice(cardIndex, 1, data);
+    }
+  }
+})
 
 document.addEventListener('turbolinks:load', () => {
   var element = document.getElementById("boards")
   if ( element != undefined ) {
-    window.store.lists = JSON.parse(element.dataset.lists)
+    window.store.state.lists = JSON.parse(element.dataset.lists) //改用vuex,增加了.state
     const app = new Vue({
       el: element,
-      data:  window.store,
-      template: "<App v-bind:original_lists='lists'/>",
+      store: window.store,
+      template: "<App />",
+      //改用vuex
+      // data:  window.store,
+      // template: "<App v-bind:original_lists='lists'/>",
       components: {App}
     })
   }
