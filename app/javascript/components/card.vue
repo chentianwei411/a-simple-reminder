@@ -11,11 +11,12 @@
         <div class="modal-content">
 
           <div class="modal-header">
-            <h4 class="modal-title">{{ card.name }}</h4>
+            <h4 class="modal-title" @click='editingTitle = !editingTitle'>{{ card.name }}<span>✎</span></h4>
+            <input v-if="editingTitle" v-bind:value='name' @input="name = $event.target.value" class="form-control">
           </div>
 
           <div class="modal-body">
-            <input v-bind:value='name' @input="name = $event.target.value" class="form-control"></input>
+            <textarea v-bind:value='text' @input="text = $event.target.value" class="form-control"></textarea>
           </div>
 
           <div class="modal-footer">
@@ -33,8 +34,10 @@
     props: ["card", "list"],
     data: function() {
       return {
+        editingTitle: false,
         editing: false,
         name: this.card.name,
+        text: this.card.text,
       }
     },
 
@@ -49,6 +52,7 @@
       save: function() {
         var data = new FormData
         data.append("card[name]", this.name)
+        data.append("card[text]", this.text)
         // const list_id = this.list.id
         const card_id = this.card.id
 
@@ -67,7 +71,7 @@
             //   return item.id === card_id
             // })
             // window.store.lists[list_index].cards.splice(cardIndex, 1, data)
-
+            console.log(data)
             this.$store.commit('editCard', data)
           }
         })
