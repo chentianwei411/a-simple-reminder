@@ -2,7 +2,7 @@
   <div class="list">
     <h6 >{{ list.name }}</h6>
 
-    <draggable v-model='list.cards' :options="{group: 'cards'}" class="list-card" @change="cardMoved">
+    <draggable v-model='list.cards' :options="{group: 'cards', filter: '.ignore-element'}" class="list-card" @change="cardMoved">
       <card v-for="card in list.cards" v-bind:card='card' v-bind:list="list"></card>
     </draggable>
 

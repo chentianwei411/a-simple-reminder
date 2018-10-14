@@ -6,8 +6,8 @@
     <!-- 通过editing，来决定是否加载这个div，连带2个类， -->
     <div v-if='editing' class="modal-backdrop show"></div>
 
-    <div v-if='editing' @click='closeModal' class="modal show" style="display: block">
-      <div class="modal-dialog modal-dialog-centered ">
+    <div v-if='editing' @click='closeModal' class="modal show ignore-element" style="display: block" >
+      <div class="modal-dialog modal-dialog-centered " >
         <div class="modal-content">
 
           <div class="modal-header">
@@ -46,6 +46,7 @@
       closeModal: function(event) {
         if (event.target.classList.contains("modal")) {
           this.editing = false
+          this.editingTitle = false
         }
       },
 
@@ -71,11 +72,11 @@
             //   return item.id === card_id
             // })
             // window.store.lists[list_index].cards.splice(cardIndex, 1, data)
-            console.log(data)
             this.$store.commit('editCard', data)
           }
         })
         this.editing = false
+        this.editingTitle = false
       },
     }
   }
