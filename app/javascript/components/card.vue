@@ -11,16 +11,20 @@
         <div class="modal-content">
 
           <div class="modal-header">
-            <h4 class="modal-title" @click='editingTitle = !editingTitle'>{{ card.name }}<span>✎</span></h4>
+            <h4 class="modal-title" @click='editingTitle = !editingTitle' v-if='!editingTitle'>{{ card.name }}<span>✎</span></h4>
             <input v-if="editingTitle" v-bind:value='name' @input="name = $event.target.value" class="form-control">
           </div>
 
           <div class="modal-body">
-            <textarea v-bind:value='text' @input="text = $event.target.value" class="form-control"></textarea>
+            <div v-if='!editingText'>
+              <p>{{ text }}</p>
+              <p v-on:click="editingText = !editingText">✎</p>
+            </div>
+            <textarea v-if='editingText' v-bind:value='text' @input="text = $event.target.value" class="form-control"></textarea>
           </div>
 
           <div class="modal-footer">
-            <button @click="save" type="button" class="btn btn-primary">Save changes</button>
+            <button @click="save" type="button" class="btn btn-primary btn-sm">Save changes</button>
           </div>
 
         </div>
@@ -35,6 +39,7 @@
     data: function() {
       return {
         editingTitle: false,
+        editingText: false,
         editing: false,
         name: this.card.name,
         text: this.card.text,
@@ -47,6 +52,7 @@
         if (event.target.classList.contains("modal")) {
           this.editing = false
           this.editingTitle = false
+          this.editingText = false
         }
       },
 
@@ -77,6 +83,7 @@
         })
         this.editing = false
         this.editingTitle = false
+        this.editingText = false
       },
     }
   }
