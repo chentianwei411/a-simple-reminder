@@ -59,8 +59,9 @@ export default {
         data: data,
         dataType: 'json',
         success: (data) => {
-          // 改用vuex,所有lists的变化统一放到Vuex.Store实例中。
-          this.$store.commit('addList', data)
+          // 1.改用vuex,所有lists的变化统一放到Vuex.Store实例中。
+          // 2.使用actionCable。注释掉
+          // this.$store.commit('addList', data)
           // window.store.lists.push(data)
           this.message = ''
           this.editable = false

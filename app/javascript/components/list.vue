@@ -87,9 +87,11 @@
             // })
             // window.store.lists[index].cards.push(data)
 
-            // 使用Vuex.Store实例，对state.lists进行状态的管理
-            this.$store.commit('addCard', data)
+            // 1.使用Vuex.Store实例，对state.lists进行状态的管理
+            // 2.使用ActionCable,注释掉：
+            // this.$store.commit('addCard', data)
             this.message = ""
+            this.$nextTick(()=> { this.$refs.input.focus()})
           }
         })
       }

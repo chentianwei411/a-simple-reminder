@@ -17,7 +17,7 @@
 
           <div class="modal-body">
             <div v-if='!editingText'>
-              <p>{{ text }}</p>
+              <p id="bodyText">{{ text }}</p>
               <p v-on:click="editingText = !editingText">✎</p>
             </div>
             <textarea v-if='editingText' v-bind:value='text' @input="text = $event.target.value" class="form-control"></textarea>
@@ -69,8 +69,6 @@
           data: data,
           dataType: 'json',
           success: data => {
-            // console.log(this); 这里的this指当前函数本身，不是父作用域，this代表本身。
-            // 要使用父作用域this，需要使用fat arrow函数。
             // const list_index = window.store.lists.findIndex((item) => {
             //   return item.id === list_id
             // })
@@ -78,7 +76,8 @@
             //   return item.id === card_id
             // })
             // window.store.lists[list_index].cards.splice(cardIndex, 1, data)
-            this.$store.commit('editCard', data)
+            // 使用ActionCable，注释掉：
+            // this.$store.commit('editCard', data)
           }
         })
         this.editing = false
@@ -97,5 +96,8 @@ modal-lg 弹出窗口大小
  -->
 
 <style scoped>
-
+#bodyText {
+  width: 100%;
+  overflow: scroll;
+}
 </style>
