@@ -1,5 +1,7 @@
 # 一个简单的记录版（类似Trello）
 
+![image](https://github.com/chentianwei411/a-simple-book/blob/master/public/%E6%BC%94%E7%A4%BA%E5%9B%BE.gif)
+
 用途：记录日常信息。
 
 * 新增管理list,及card。
