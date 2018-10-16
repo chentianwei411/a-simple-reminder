@@ -2,7 +2,7 @@
   <draggable v-model='lists' :options="{group: 'lists'}" class='board' @end='listMoved'>
     <list v-for="(list, index) in lists" v-bind:list='list'></list>
 
-    <a v-if="!editable" @click="inputMessage">add a list</a>
+    <a v-if="!editable" @click="inputMessage" class="list">add a list</a>
     <div v-if="editable" class="list">
       <label>Please enter your list:</label>
       <input type="text" class="form-control mb-1" v-model='message' ref='inputlist'>
