@@ -1,24 +1,14 @@
-# README
+# 一个简单的记录版（类似Trello）
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+用途：记录日常信息。
 
-Things you may want to cover:
+* 新增管理list,及card。
 
-* Ruby version
+* 可以拖拉移动，list, card
 
-* System dependencies
+技术：
+* Vue.js，使用单文件组件。使用了draggable插件。
 
-* Configuration
+* Vuex管理状态。
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* 使用了ActionCable，可以跨浏览器同步网页。
