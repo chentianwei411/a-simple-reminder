@@ -43,14 +43,14 @@
 
         if ( evt == undefined) { return }
         // 改为使用全局变量window.store
-        var list_index = window.store.lists.findIndex((list) => {
+        var list_index = window.store.state.lists.findIndex((list) => {
           return list.cards.find((card) => {
             return card.id === evt.element.id
           })
         })
 
         var data = new FormData
-        data.append("card[list_id]", window.store.lists[list_index].id)
+        data.append("card[list_id]", window.store.state.lists[list_index].id)
         data.append("card[position]", evt.newIndex + 1)
 
         Rails.ajax({

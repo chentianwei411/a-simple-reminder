@@ -31,7 +31,7 @@ window.store = new Vuex.Store({
         return item.id === data.id
       });
       state.lists[list_index].cards.splice(cardIndex, 1, data);
-    }
+    },
   }
 })
 

@@ -1,15 +1,19 @@
 <template>
-  <draggable v-model='lists' :options="{group: 'lists'}" class='board' @end='listMoved'>
-    <list v-for="(list, index) in lists" v-bind:list='list'></list>
+  <div class="board">
+    <draggable v-model='lists' :options="{group: 'lists'}" class='dragArea' @end='listMoved'>
+      <list v-for="(list, index) in lists" v-bind:list='list'></list>
+    </draggable>
 
-    <a v-if="!editable" @click="inputMessage" class="list">add a list</a>
-    <div v-if="editable" class="list">
-      <label>Please enter your list:</label>
-      <input type="text" class="form-control mb-1" v-model='message' ref='inputlist'>
-      <button @click="createList" class="btn btn-secondary btn-sm">add list</button>
-      <a @click="editable = false">cancel</a>
+    <div class="list">
+      <a v-if="!editable" @click="inputMessage">add a list</a>
+      <div v-if="editable">
+        <label>Please enter your list:</label>
+        <input type="text" class="form-control mb-1" v-model='message' ref='inputlist'>
+        <button @click="createList" class="btn btn-secondary btn-sm">add list</button>
+        <a @click="editable = false">cancel</a>
+      </div>
     </div>
-  </draggable>
+  </div>
 </template>
 
 <script>
@@ -33,8 +37,13 @@ export default {
   },
 
   computed: {
-    lists() {
-      return this.$store.state.lists;
+    lists: {
+      get() {
+        return this.$store.state.lists
+      },
+      set(value) {
+        return this.$store.state.lists = value
+      }
     }
   },
 
@@ -71,12 +80,13 @@ export default {
     },
 
     listMoved: function(event) {
-      console.log(event)
+
       // 改变位置发生改变的list的position属性。
       var data = new FormData
       data.append("list[position]", event.newIndex + 1)
 
       Rails.ajax({
+        beforeSend: () => true,
         // url定位到这个被拖拉的元素并执行move方法
         url: `/lists/${this.lists[event.newIndex].id}/move`,
         type: 'PATCH',
@@ -148,6 +158,10 @@ export default {
 </script>
 
 <style scoped>
+.dragArea {
+  min-height: 10px;
+  display: inline-block;
+}
 
 .board {
   white-space: nowrap;
