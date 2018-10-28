@@ -67,7 +67,11 @@ class ListsController < ApplicationController
     # acts_as_list中的方法: 改变Positon,并Reorder it.
     # gem 自动交互2者的position。只需要改被拖动的即可。
     @list.insert_at(list_params[:position].to_i)
-    render :index
+    # render :index
+    respond_to do |format|
+      ActionCable.server.broadcast "board", { commit: 'moveList', payload: render_to_string(:show, format: :json)}
+      format.json { render :show, status: :ok, location: @list }
+    end
   end
 
   private

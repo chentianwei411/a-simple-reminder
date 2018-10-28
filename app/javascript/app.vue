@@ -82,6 +82,7 @@ export default {
     listMoved: function(event) {
 
       // 改变位置发生改变的list的position属性。
+      const that = this
       var data = new FormData
       data.append("list[position]", event.newIndex + 1)
 

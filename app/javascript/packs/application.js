@@ -32,6 +32,17 @@ window.store = new Vuex.Store({
       });
       state.lists[list_index].cards.splice(cardIndex, 1, data);
     },
+    moveList(state, data) {
+      // console.log(data)
+      // const index = state.lists.findIndex((item) => {
+      //   return item.id == data.id
+      // })
+      // state.lists[index].position = data.position
+      // // const temp = state.lists
+      // state.lists = []
+      // state.lists = temp
+      //DOM树的监听,list没有变化，所有不会动态的改变DOM结构。
+    }
   }
 })
 
