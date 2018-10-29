@@ -44,6 +44,10 @@ gem 'pg'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+
+  # 部署工具：
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
 end
 gem 'devise'
 gem 'bootstrap', '~> 4.1.3'
@@ -58,9 +62,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  # 部署工具：
-  gem 'capistrano-rails'
-  gem 'capistrano-passenger'
 end
 
 group :test do
